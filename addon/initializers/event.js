@@ -37,7 +37,34 @@ export function initialize(container, application) {
       // will be a result of clicking a button.
       if (typeof window.ga !== 'undefined') {
         var code = [].concat.apply(['send', 'event', 'button', 'click'], arguments);
-        window.ga.apply(this, code);
+
+        // Special case:
+        // If code value is an ember model with a product identifer in "product" we use this instead of raw "code" object
+        if (code.length > 0) {
+          var value = code[code.length-1];
+          if (typeof value === 'object' && value.get('product') != 'undefined') {
+            code[code.length-1] = "" + value.get('product');
+          }
+
+          // We move the event send to afterRender event in order to get hold of the H1 text
+          Ember.run.scheduleOnce('afterRender', this, function() {
+            var gaTitle = '';
+            if (googleTrackingUseH1AsTitle) {
+              // We should use H1 as title
+              var gaH1 = ("" + Ember.$('h1').first().html()).replace(/"/gi, '\\"');
+              if (gaH1 === '' || gaH1 === 'undefined') {
+                gaH1 = googleTrackingDefaultH1; // H1 is not set so we use default H1 from config
+              }
+              gaTitle = gaH1 !== '' ? gaH1 : googleTrackingDefaultH1;
+            }
+            else {
+              // We just use the current page title
+              gaTitle = this.get('title');
+            }
+            window.ga('set', '&dt', gaTitle); // Set title
+            window.ga.apply(this, code);
+          });
+        }
       }
     }
   });

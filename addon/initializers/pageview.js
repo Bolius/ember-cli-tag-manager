@@ -55,15 +55,23 @@ export function initialize(container, application) {
         }
 
         if (typeof window.ga !== 'undefined') {
-          // We register a title for unknown pages without a H1 tag (shouldn't happen)
-          var unknownPageTitle = 'Husets Kalender - ukendt side';
-
-          // We also moved the pageview send to afterRender event in order to get hold of the H1 text
+          // We move the pageview send to afterRender event in order to get hold of the H1 text
           Ember.run.scheduleOnce('afterRender', this, function() {
-            var gaTitle = ("" + Ember.$('h1').first().html()).replace(/"/gi, '\\"');
-            window.ga('send', 'pageview', { page: this.get('url'), title: ( gaTitle != '' ? gaTitle : unknownPageTitle ) });
+            var gaTitle = '';
+            if (googleTrackingUseH1AsTitle) {
+              // We should use H1 as title
+              var gaH1 = ("" + Ember.$('h1').first().html()).replace(/"/gi, '\\"');
+              if (gaH1 === '' || gaH1 === 'undefined') {
+                gaH1 = googleTrackingDefaultH1; // H1 is not set so we use default H1 from config
+              }
+              gaTitle = gaH1 !== '' ? gaH1 : googleTrackingDefaultH1;
+            }
+            else {
+              // We just use the current page title
+              gaTitle = this.get('title');
+            }
+            window.ga('send', 'pageview', { page: this.get('url'), title: gaTitle });
           });
-
         }
       });
     }),

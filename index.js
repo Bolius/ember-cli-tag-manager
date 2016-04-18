@@ -72,6 +72,21 @@ module.exports = {
                       '</script>\n';
       }
 
+      tagManager += '<script>\n';
+      if (appConfig.APP.GOOGLE_TRACKING_USE_H1_AS_TITLE) {
+        tagManager += 'googleTrackingUseH1AsTitle = true;\n';
+        if (appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1) {
+          tagManager += 'googleTrackingDefaultH1 = "' + appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1 + '";\n';
+        }
+        else {
+          tagManager += 'googleTrackingDefaultH1 = "";\n';
+        }
+      }
+      else {
+        tagManager += 'googleTrackingUseH1AsTitle = false;\n';
+      }
+      tagManager += '</script>\n';
+
       if (appConfig.APP.FACEBOOK_CUSTOM_AUDIENCES_TRACKING_ID) {
         tagManager += '<script type="text/javascript">\n' +
           '\t!function(f,b,e,v,n,t,s) {\n' +
@@ -184,5 +199,6 @@ module.exports = {
 
       return tagManager;
     }
-  },
+  }
+
 };
