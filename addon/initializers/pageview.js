@@ -32,11 +32,34 @@ export function initialize(container, application) {
           Ember.Logger.info('Tracking Google Analytics pageview:', this.get('url'));
         }
 
+        // Check if UID should be added
+        if (googleTrackingUid !== 'undefined') {
+          var f = new Function('return ' + googleTrackingUid + ';');
+          var uid = f();
+          if (typeof uid === 'string' && uid !== '') {
+            window.ga('set', '&uid', uid);
+          }
+        }
+
+        // Check if dimensions should be added
+        if (typeof googleTrackingDimensions === 'object') {
+          var dimensions = {};
+          for (var key in googleTrackingDimensions) {
+            var f = new Function('return ' + googleTrackingDimensions[key] + ';');
+            var dimension = f();
+            if (typeof dimension !== 'undefined') {
+              dimensions[key] = dimension;
+            }
+          }
+          window.ga('set', dimensions);
+        }
+
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', { page: this.get('url'), title: this.get('url') });
         }
       });
     }),
+
 
     /*
      * Push the page transition to the

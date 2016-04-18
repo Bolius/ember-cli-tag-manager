@@ -51,6 +51,27 @@ module.exports = {
         tagManager += '</script>\n';
       }
 
+      if (appConfig.APP.GOOGLE_TRACKING_UID) {
+        tagManager += '<script>\n' +
+                      'googleTrackingUid = "' + appConfig.APP.GOOGLE_TRACKING_UID + '";\n' +
+                      '</script>\n';
+      }
+
+      if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
+        var lastDimension = '', currentDimension;
+        tagManager += '<script>\n' +
+                      'var googleTrackingDimensions = {';
+        for(var key in appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
+          if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS.hasOwnProperty(key)) {
+            currentDimension = key+':"' + appConfig.APP.GOOGLE_TRACKING_DIMENSIONS[key] + '"';
+            tagManager += (lastDimension? ',' : '') + '\n\t' + currentDimension;
+            lastDimension = currentDimension;
+          }
+        }
+        tagManager += '\n};\n' +
+                      '</script>\n';
+      }
+
       if (appConfig.APP.FACEBOOK_CUSTOM_AUDIENCES_TRACKING_ID) {
         tagManager += '<script type="text/javascript">\n' +
           '\t!function(f,b,e,v,n,t,s) {\n' +
