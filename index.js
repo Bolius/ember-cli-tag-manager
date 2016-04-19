@@ -57,6 +57,17 @@ module.exports = {
                       '</script>\n';
       }
 
+      if (typeof appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION == 'object') {
+        var lastLabelAsAction = '';
+        tagManager += '<script>\n' +
+                      'googleTrackingEventLabelsAsAction = [\n';
+        for(var i=0; i < appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION.length; i++) {
+          tagManager += ( lastLabelAsAction != '' ? ',\n' : '') + '\t"'+ appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i] + '"';
+          lastLabelAsAction = appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i];
+        }
+        tagManager += '\n];</script>\n';
+      }
+
       if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
         var lastDimension = '', currentDimension;
         tagManager += '<script>\n' +

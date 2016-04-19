@@ -37,7 +37,7 @@ export function initialize(container, application) {
           var f = new Function('return ' + googleTrackingUid + ';');
           var uid = f();
           if (typeof uid === 'string' && uid !== '') {
-            window.ga('set', '&uid', uid);
+            window.ga('set', 'userId', uid);
           }
         }
 

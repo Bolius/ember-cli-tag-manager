@@ -35,15 +35,35 @@ export function initialize(container, application) {
       // Create a generic array of arguments to
       // send Google Analytics. Most actions
       // will be a result of clicking a button.
+      var arr = ['send', 'event', 'button', 'click'];
+
       if (typeof window.ga !== 'undefined') {
-        var code = [].concat.apply(['send', 'event', 'button', 'click'], arguments);
+        // Check for labels in googleTrackingEventLabelsAsAction array
+        // to see if we want the label registered as action instead of 'click'
+        if (typeof googleTrackingEventLabelsAsAction === 'object') {
+          for(var i = 0; i < googleTrackingEventLabelsAsAction.length; i++) {
+            // We only check for objects with contents {"0": [label], "1": [value]}
+            if (arguments[0]) {
+              // Check if label in array of labels to remove action for
+              if (googleTrackingEventLabelsAsAction[i] === arguments[0]) {
+                arr.pop(); // Remove 'click' from array
+              }
+            }
+          }
+        }
+
+        var code = [].concat.apply(arr, arguments);
 
         // Special case:
         // If code value is an ember model with a product identifer in "product" we use this instead of raw "code" object
         if (code.length > 0) {
           var value = code[code.length-1];
-          if (typeof value === 'object' && value.get('product') != 'undefined') {
-            code[code.length-1] = "" + value.get('product');
+
+          if (typeof value === 'object' && value.get('product') != 'undefined' && value.get('product') != null) {
+            code[code.length-1] = "" + value.get('product'); // Use articleid
+          }
+          else if (typeof value === 'object' && value.get('title') != 'undefined' && value.get('title') != null) {
+            code[code.length-1] = "Task:" + (""+value.get('title').replace(/"/gi, '\\"')); // Use task title
           }
 
           // We move the event send to afterRender event in order to get hold of the H1 text
@@ -61,7 +81,7 @@ export function initialize(container, application) {
               // We just use the current page title
               gaTitle = this.get('title');
             }
-            window.ga('set', '&dt', gaTitle); // Set title
+            window.ga('set', 'title', gaTitle); // Set title
             window.ga.apply(this, code);
           });
         }
