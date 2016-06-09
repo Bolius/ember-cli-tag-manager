@@ -68,14 +68,16 @@ export function initialize(container, application) {
             }
             else {
               // We just use the current page title
-              gaTitle = this.get('title');
+              gaTitle = '' + this.get('title');
             }
-            window.ga('send', 'pageview', { page: this.get('url'), title: gaTitle });
+
+            window.ga('send', 'pageview', { page: this.get('url'), title: gaTitle.trim() });
           });
         }
+
+
       });
     }),
-
 
     /*
      * Push the page transition to the

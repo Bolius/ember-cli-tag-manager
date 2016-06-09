@@ -52,49 +52,49 @@ module.exports = {
       }
 
       if (appConfig.APP.GOOGLE_TRACKING_UID) {
-        tagManager += '<script>\n' +
-                      'googleTrackingUid = "' + appConfig.APP.GOOGLE_TRACKING_UID + '";\n' +
-                      '</script>\n';
+          tagManager += '<script>\n' +
+                        'googleTrackingUid = "' + appConfig.APP.GOOGLE_TRACKING_UID + '";\n' +
+                        '</script>\n';
       }
 
       if (typeof appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION == 'object') {
-        var lastLabelAsAction = '';
-        tagManager += '<script>\n' +
-                      'googleTrackingEventLabelsAsAction = [\n';
-        for(var i=0; i < appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION.length; i++) {
-          tagManager += ( lastLabelAsAction != '' ? ',\n' : '') + '\t"'+ appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i] + '"';
-          lastLabelAsAction = appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i];
-        }
-        tagManager += '\n];</script>\n';
+          var lastLabelAsAction = '';
+          tagManager += '<script>\n' +
+                        'googleTrackingEventLabelsAsAction = [\n';
+          for(var i=0; i < appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION.length; i++) {
+            tagManager += ( lastLabelAsAction != '' ? ',\n' : '') + '\t"'+ appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i] + '"';
+            lastLabelAsAction = appConfig.APP.GOOGLE_TRACKING_EVENT_LABELS_AS_ACTION[i];
+          }
+          tagManager += '\n];</script>\n';
       }
 
       if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
-        var lastDimension = '', currentDimension;
-        tagManager += '<script>\n' +
-                      'var googleTrackingDimensions = {';
-        for(var key in appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
-          if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS.hasOwnProperty(key)) {
-            currentDimension = key+':"' + appConfig.APP.GOOGLE_TRACKING_DIMENSIONS[key] + '"';
-            tagManager += (lastDimension? ',' : '') + '\n\t' + currentDimension;
-            lastDimension = currentDimension;
+          var lastDimension = '', currentDimension;
+          tagManager += '<script>\n' +
+                        'var googleTrackingDimensions = {';
+          for(var key in appConfig.APP.GOOGLE_TRACKING_DIMENSIONS) {
+            if (appConfig.APP.GOOGLE_TRACKING_DIMENSIONS.hasOwnProperty(key)) {
+              currentDimension = key+':"' + appConfig.APP.GOOGLE_TRACKING_DIMENSIONS[key] + '"';
+              tagManager += (lastDimension? ',' : '') + '\n\t' + currentDimension;
+              lastDimension = currentDimension;
+            }
           }
-        }
-        tagManager += '\n};\n' +
-                      '</script>\n';
+          tagManager += '\n};\n' +
+                        '</script>\n';
       }
 
       tagManager += '<script>\n';
       if (appConfig.APP.GOOGLE_TRACKING_USE_H1_AS_TITLE) {
-        tagManager += 'googleTrackingUseH1AsTitle = true;\n';
-        if (appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1) {
-          tagManager += 'googleTrackingDefaultH1 = "' + appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1 + '";\n';
-        }
-        else {
-          tagManager += 'googleTrackingDefaultH1 = "";\n';
-        }
+          tagManager += 'googleTrackingUseH1AsTitle = true;\n';
+          if (appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1) {
+            tagManager += 'googleTrackingDefaultH1 = "' + appConfig.APP.GOOGLE_TRACKING_DEFAULT_H1 + '";\n';
+          }
+          else {
+            tagManager += 'googleTrackingDefaultH1 = "";\n';
+          }
       }
       else {
-        tagManager += 'googleTrackingUseH1AsTitle = false;\n';
+          tagManager += 'googleTrackingUseH1AsTitle = false;\n';
       }
       tagManager += '</script>\n';
 
@@ -210,6 +210,5 @@ module.exports = {
 
       return tagManager;
     }
-  }
-
+  },
 };
