@@ -59,11 +59,14 @@ export function initialize(container, application) {
           if (code.length > 0) {
             var value = code[code.length-1];
 
-            if (typeof value === 'object' && value.get('product') != 'undefined' && value.get('product') != null) {
+            if (typeof value === 'object' && typeof value.get === 'function' && value.get('product') !== undefined && value.get('product') !== null) {
               code[code.length-1] = "" + value.get('product'); // Use articleid
             }
-            else if (typeof value === 'object' && value.get('title') != 'undefined' && value.get('title') != null) {
+            else if (typeof value === 'object' && typeof value.get === 'function' && value.get('title') !== undefined && value.get('title') !== null) {
               code[code.length-1] = "Task:" + (""+value.get('title').replace(/"/gi, '\\"')); // Use task title
+            }
+            else if (typeof value === 'object' && typeof value.title !== undefined && value.title !== '') {
+              code[code.length-1] = "" + value.title; // Use articleid
             }
             else {
               code[code.length-1] = "" + code[code.length-1];
